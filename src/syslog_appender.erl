@@ -82,8 +82,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 do_log(#log{level = L} = Log, #syslog_appender{level=Level} = State) ->
     %% Syslog levels are a little bit differnt
-    ToLog = to_log(L, Level),
-    case ToLog of
+    case should_log(L, Level) of
 	true ->
 	    Pid = State#syslog_appender.socket,
 	    Host = State#syslog_appender.host,
@@ -92,8 +91,8 @@ do_log(#log{level = L} = Log, #syslog_appender{level=Level} = State) ->
 	    Fac = State#syslog_appender.facility,
 	    Msg = log_formatter:format(Log, Format),
 
-	    L2 = level(L),
-	    do_send(Pid, Host, Port, {Fac, L2, Msg});
+	    Who = node(),
+	    do_send(Pid, Host, Port, {Who, Fac, L, Msg});
 	false ->
 	    ok
     end.
@@ -107,7 +106,6 @@ do_log(#log{level = L} = Log, #syslog_appender{level=Level} = State) ->
 %% Convenient routine for specifying levels.
 %% modified by ahmed al-issaei
 
-level(all)       -> 0; % to allow 'all' in conf parameters for level
 level(emergency) -> 0; % system is unusable
 level(emerg)     -> 0; % shortcut for emergency
 level(alert)     -> 1; % action must be taken immediately 
@@ -120,6 +118,7 @@ level(warn)      -> 4; % shortcut for warning
 level(notice)    -> 5; % normal but significant condition 
 level(info)      -> 6; % informational
 level(debug)     -> 7; % debug-level messages
+level(all)       -> 7; % to allow 'all' in conf parameters for level
 level(_)         -> 1. % anything else is alert
 
 %% Convenient routine for specifying facility codes
@@ -153,12 +152,11 @@ facility(_)        -> facility(user). % anything else is user
 %% priorities/facilities are encoded into a single 32-bit 
 %% quantity, where the bottom 3 bits are the priority (0-7) 
 %% and the top 28 bits are the facility (0-big number).    
-do_send(S,Host,Port,{Who,Level,Msg}) ->
-    Packet = "<" ++ i2l(Level) ++ "> " ++ a2l(Who) ++ ": " ++ Msg ++ "\n",
-    gen_udp:send(S,Host,Port,Packet);
-do_send(S,Host,Port,{Facil,Who,Level,Msg}) ->
-    Packet = "<" ++ i2l(Facil bor Level) ++ "> " ++ a2l(Who) ++ ": " ++ Msg ++ "\n",
-    gen_udp:send(S,Host,Port,Packet).
+do_send(S,Host,Port,{Who,Facility,Level,Msg})
+  when is_atom(Who), is_atom(Facility), is_atom(Level) ->
+    Type = (facility(Facility) bor level(Level)),
+    Packet = "<" ++ i2l(Type) ++ "> " ++ a2l(Who) ++ ": " ++ Msg ++ "\n",
+    gen_udp:send(S,Host,Port,lists:flatten(Packet)).
 
 i2l(Int) when is_integer(Int) ->
     integer_to_list(Int);
@@ -170,5 +168,6 @@ a2l(Atom) when is_atom(Atom) ->
 a2l(Atom) ->
     Atom.
 
-to_log(Cur, Level) ->
-    level(Cur) > level(Level).
+%% Log4erl uses decreasing values for priority
+should_log(Cur, Level) when is_atom(Cur), is_atom(Level) ->
+    level(Cur) =< level(Level).

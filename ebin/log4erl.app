@@ -2,10 +2,10 @@
 %% application.
 {application, log4erl,
 [{description, "Logger for erlang in the spirit of Log4J"},
- {vsn, "0.8.6"},
+ {vsn, "0.9.0"},
  {modules, [log4erl]},
  {registered,[log4erl]},
  {applications, [kernel,stdlib]},
- {mod, {log4erl,[default_logger]}},
+ {mod, {log4erl,[]}},
  {start_phases, []}
 ]}.

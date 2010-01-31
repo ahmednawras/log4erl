@@ -33,37 +33,9 @@ change_log_level(Logger, Level) ->
 
 change_level(Logger, Appender, Level) ->
     call_appender(Logger, Appender, {change_level, Level}).
-%%     try
-%% 	Apps = gen_event:which_handlers(Logger)
-%% 	?LOG2("log_manager:change_format/3 get apps ~p~n",[Apps]),
-%% 	case lists:filter(fun({_,X}) -> X =:= Appender end, Apps) of
-%% 	    [] ->
-%% 		{error, no_appender_found};
-%% 	    [Apps1] ->
-%% 		?LOG2("get apps: ~p~n",[Apps1]),
-%% 		gen_event:call(Logger, Apps1, {change_level, Level})
-%% 	end
-%%     catch
-%% 	exit:noproc ->
-%% 	    {error, no_such_logger}
-%%     end.
 
 change_format(Logger, Appender, Format) ->
     call_appender(Logger, Appender, {change_format, Format}).
-%%     try
-%% 	Apps = gen_event:which_handlers(Logger),
-%% 	?LOG2("log_manager:change_format/3 get apps ~p~n",[Apps]),
-%% 	case lists:filter(fun({_,X}) -> X =:= Appender end, Apps) of
-%% 	    [] ->
-%% 		{error, no_appender_found};
-%% 	    [Apps1] ->
-%% 		?LOG2("get apps: ~p~n",[Apps1]),
-%% 		gen_event:call(Logger, Apps1, {change_format, Format})
-%% 	end
-%%     catch
-%% 	exit:noproc ->
-%% 	    {error, no_such_logger}
-%%     end.
 
 %%--------------------------------------------------------------------
 %% Logger API functions
