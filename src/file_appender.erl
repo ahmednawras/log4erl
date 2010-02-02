@@ -83,13 +83,16 @@ handle_event({log,LLog}, State) ->
     Res = check_rotation(State),
     {ok, Res}.
 
-
 handle_call({change_format, Format}, State) ->
     ?LOG2("Old State in file_appender is ~p~n",[State]),
     {ok, Tokens} = log_formatter:parse(Format),
     ?LOG2("Adding format of ~p~n",[Tokens]),
     State1 = State#file_appender{format=Tokens},
     {ok, ok, State1};
+handle_call({change_level, Level}, State) ->
+    State2 = State#file_appender{level = Level},
+    ?LOG2("Changed level to ~p~n",[Level]),
+    {ok, ok, State2};
 handle_call(_Request, State) ->
     Reply = ok,
     {ok, Reply, State}.
