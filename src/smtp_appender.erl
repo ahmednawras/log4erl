@@ -129,7 +129,7 @@ init_smtp(Ip, Port, Uname, Password) ->
 	{undefined, undefined} ->
 	    ok;
 	_ ->
-	    smtp_fsm:login(Uname, Password)
+	    smtp_fsm:login(Pid, Uname, Password)
     end,
     Pid.
 	    
