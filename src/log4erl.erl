@@ -145,7 +145,8 @@ log(Logger, Level, Log, Data) ->
     filter_log(Level, {log, Logger, Level, Log, Data}).
 
 filter_log(Level, Msg) ->
-    case log4erl_utils:to_log(log_filter:cutoff_level(), Level) of
+    %case log4erl_utils:to_log(log_filter:cutoff_level(), Level) of
+    case log4erl_utils:to_log(Level, log_filter:cutoff_level()) of
         true ->
             try_msg(Msg);
         false ->

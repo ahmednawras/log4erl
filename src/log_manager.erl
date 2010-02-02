@@ -58,7 +58,7 @@ notify_logger(Logger, Msg) ->
 call_appender(Logger, Appender, Msg) ->
     try
 	Apps = gen_event:which_handlers(Logger),
-	?LOG2("log_manager:change_format/3 get apps ~p~n",[Apps]),
+	?LOG2("log_manager:call_appender/3 get apps ~p~n",[Apps]),
 	case lists:filter(fun({_,X}) -> X =:= Appender end, Apps) of
 	    [] ->
 		{error, no_appender_found};

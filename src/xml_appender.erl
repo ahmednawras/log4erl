@@ -85,6 +85,10 @@ handle_event({log,LLog}, State) ->
 handle_call({change_format, _Format}, State) ->
     ?LOG("Cannot change format in xml_appender~n"),
     {ok, ok, State};
+handle_call({change_level, Level}, State) ->
+    State2 = State#xml_appender{level = Level},
+    ?LOG2("Changed level to ~p~n",[Level]),
+    {ok, ok, State2};
 handle_call(_Request, State) ->
     Reply = ok,
     {ok, Reply, State}.

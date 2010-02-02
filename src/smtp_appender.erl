@@ -79,6 +79,10 @@ handle_call({change_format, Format}, State) ->
     S2 = S#msg_opts{msg=Tokens},
     State2 = State#smtp_appender{msg_opts=S2},
     {ok, ok, State2};
+handle_call({change_level, Level}, State) ->
+    State2 = State#smtp_appender{level = Level},
+    ?LOG2("Changed level to ~p~n",[Level]),
+    {ok, ok, State2};
 handle_call(_Request, State) ->
     {ok, ok, State}.
 

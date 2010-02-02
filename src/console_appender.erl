@@ -28,9 +28,9 @@ init({Level}) ->
 init({Level, Format} = _Args) ->
     ?LOG2("Initializing console_appender with args =  ~p~n",[_Args]),
     {ok, Toks} = log_formatter:parse(Format),
-    ?LOG2("Tokens received is ~p",[Toks]),
+    ?LOG2("Tokens received is ~p~n",[Toks]),
     State = #console_appender{level = Level, format = Toks},
-    ?LOG2("State is ~p",[State]),
+    ?LOG2("State is ~p~n",[State]),
     {ok, State}.
 
 handle_event({change_level, Level}, State) ->
@@ -48,8 +48,13 @@ handle_call({change_format, Format}, State) ->
     ?LOG2("Adding format of ~p~n",[Tokens]),
     State1 = State#console_appender{format=Tokens},
     {ok, ok, State1};
+handle_call({change_level, Level}, State) ->
+    State2 = State#console_appender{level = Level},
+    ?LOG2("Changed level to ~p~n",[Level]),
+    {ok, ok, State2};
 handle_call(_Request, State) ->
     Reply = ok,
+    ?LOG2("Received unknown request ~p~n", [_Request]),
     {ok, Reply, State}.
 
 handle_info(_Info, State) ->

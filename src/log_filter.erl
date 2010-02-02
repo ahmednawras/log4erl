@@ -4,4 +4,4 @@
 
 -export([cutoff_level/0]).
 
-cutoff_level() -> debug.
+cutoff_level() -> all.

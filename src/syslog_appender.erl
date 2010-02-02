@@ -68,6 +68,10 @@ handle_call({change_format, Format}, State) ->
     ?LOG2("Adding format of ~p~n",[Tokens]),
     S2 = State#syslog_appender{format=Tokens},
     {ok, ok, S2};
+handle_call({change_level, Level}, State) ->
+    State2 = State#syslog_appender{level = Level},
+    ?LOG2("Changed level to ~p~n",[Level]),
+    {ok, ok, State2};
 handle_call(_Request, State) ->
     {ok, ok, State}.
 

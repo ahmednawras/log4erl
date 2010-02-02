@@ -6,7 +6,7 @@
 -export([reset/0, set_cutoff_level/1]).
 
 reset() ->
-    set_cutoff_level(debug).
+    set_cutoff_level(all).
 
 set_cutoff_level(CutoffLevel) ->
     LogFilterMod = log_filter_mod(CutoffLevel),
