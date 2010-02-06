@@ -68,12 +68,6 @@ get_token_value(date2, Log) ->
 		fun(X) ->
 			X2 = integer_to_list(X),
 			log4erl_utils:return_2columns(X2)
-%% 			case string:len(X2) > 1 of
-%% 			    false ->
-%% 				"0" ++ X2;
-%% 			    _ ->
-%% 				X2
-%% 			end
 		end,
 		[Y,M,Dd]),
     Res = A ++ "-" ++ B ++ "-" ++ C,
@@ -96,12 +90,6 @@ get_token_value(time2, Log) ->
 		fun(X) ->
 			X2 = integer_to_list(X),
 			log4erl_utils:return_2columns(X2)
-%% 			case string:len(X2) > 1 of
-%% 			    false ->
-%% 				"0" ++ X2;
-%% 			    _ ->
-%% 				X2
-%% 			end
 		end,
 		[H,M,S, Ms]),    
     Res = A ++ ":" ++ B ++ ":" ++ C ++ "." ++ E,
