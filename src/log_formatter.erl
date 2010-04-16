@@ -8,14 +8,13 @@
 
 test() ->
     Log = #log{level = warn,
-	              msg = "logging message for testing purposes ~p",
-	              data = [tt],
-	              time = calendar:local_time()},
-    %Ts = "%j %T [%L] - %l %n",
+	       msg = "logging message for testing purposes ~p",
+	       data = [tt],
+	       time = calendar:local_time()},
     Ts = "[%L] %l%n",
     {ok, Tokens} = parse(Ts),
-        T = format(Log, Tokens),
-        io:format("~s",[T]).
+    T = format(Log, Tokens),
+    io:format("~s",[T]).
 
 test2(Num) ->
     Ts = "%j %T [%L] - %l",
@@ -45,6 +44,7 @@ make_log(Level, Msg, Data) ->
 format(Log, Tokens) ->
     ?LOG2("log_formatter formatting log: ~p~n",[Log]),
     F = fun(X) ->
+		?LOG2("X == ~p and Log = ~p~n",[X,Log]),
 		M = get_token_value(X,Log),
 		M
 	end,
@@ -77,7 +77,7 @@ get_token_value(time, Log) ->
     {_,{H, M, S}} = D,
     [A,B,C] = lists:map(
 		fun(X) ->
-			integer_to_list(X)
+			log4erl_utils:return_2columns(integer_to_list(X))
 		end,
 		[H,M,S]),    
     Res = A ++ ":" ++ B ++ ":" ++ C,
@@ -86,12 +86,13 @@ get_token_value(time2, Log) ->
     D = Log#log.time,
     Ms = Log#log.millis,
     {_,{H, M, S}} = D,
-    [A,B,C,E] = lists:map(
+    [A,B,C] = lists:map(
 		fun(X) ->
 			X2 = integer_to_list(X),
 			log4erl_utils:return_2columns(X2)
 		end,
-		[H,M,S, Ms]),    
+		[H,M,S]),
+    E = log4erl_utils:return_Ncolumns(integer_to_list(Ms), 3),
     Res = A ++ ":" ++ B ++ ":" ++ C ++ "." ++ E,
     Res;
 get_token_value(year4, Log) ->
@@ -130,7 +131,7 @@ get_token_value(second, Log) ->
     integer_to_list(S);
 get_token_value(millis, Log) ->
     Ms = Log#log.millis,
-    integer_to_list(Ms);
+    log4erl_utils:return_Ncolumns(integer_to_list(Ms), 3);
 get_token_value(log, Log) ->
     Msg = Log#log.msg,
     Data = Log#log.data,

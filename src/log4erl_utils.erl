@@ -1,6 +1,7 @@
 -module(log4erl_utils).
 
--export([gen_log_txt/1,return_2columns/1, get_current_time/1, to_log/2]).
+-export([gen_log_txt/1,return_2columns/1, return_Ncolumns/2]).
+-export([get_current_time/1, to_log/2]).
 -export([get_id/0, get_month_name/1, get_month_long_name/1]).
 -export([to_atom/1, to_list/1, to_int/1]).
 
@@ -21,13 +22,16 @@ gen_log_txt(L) when is_list(L) ->
 
 % a function to format date/time properly (e.g. 09 instead of 9)
 return_2columns(X) ->
-    case string:len(X) of
-	1 ->
-	    "0" ++ X;
-	_ ->
+    return_Ncolumns(X, 2).
+
+return_Ncolumns(X, N) ->
+    Len = string:len(X),
+    if Len < N ->
+	    string:chars($0, N - Len) ++ X;
+	true ->
 	    X
     end.
-
+    
 % returns date/time as a properly formatted string (e.g. "01-01-2000 12:12:12")
 %get_current_time() ->
 get_current_time({{Y, M, D}, {H, Mi, S}}) ->

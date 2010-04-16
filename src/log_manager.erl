@@ -41,10 +41,10 @@ change_format(Logger, Appender, Format) ->
 %% Logger API functions
 %%--------------------------------------------------------------------
 log(Logger, Level, Log, Data) ->
-    T = calendar:local_time(),
-    {_, _, Ms} = erlang:now(),
+    Now = {_, _, Ms} = erlang:now(),
+    T = calendar:now_to_local_time(Now),
     ?LOG2("Logging:~n ~p ~p ~p ~p~n",[Logger, Level, Log, Data]),
-    LL = #log{level=Level, msg=Log, data=Data, time=T, millis = Ms},
+    LL = #log{level=Level, msg=Log, data=Data, time=T, millis = Ms div 1000},
     notify_logger(Logger, {log, LL}).
 
 notify_logger(Logger, Msg) ->
