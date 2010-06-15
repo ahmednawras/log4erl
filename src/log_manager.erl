@@ -9,6 +9,7 @@
 -export([start_link/1]).
 -export([change_log_level/2]).
 -export([change_level/3]).
+-export([change_filename/3]).
 -export([add_logger/1]).
 -export([add_appender/3]).
 -export([change_format/3]).
@@ -36,6 +37,9 @@ change_level(Logger, Appender, Level) ->
 
 change_format(Logger, Appender, Format) ->
     call_appender(Logger, Appender, {change_format, Format}).
+
+change_filename(Logger, Appender, Filename) ->
+    call_appender(Logger, Appender, {change_filename, Filename}).
 
 %%--------------------------------------------------------------------
 %% Logger API functions
