@@ -27,7 +27,7 @@
 %% max = seconds (for time) | or kiloBytes (for size)
 -record(log_type,{type, max, timer}).
 
-%% file_name = the name of the file without counter 
+%% file_name = the name of the file without counter
 %% fd = the descriptior for the file
 %% counter = current counter, used for appending to file_name in case of rotation
 %% log_type is a log_type record
@@ -48,6 +48,8 @@
 -record(msg_opts, {from, to, title, msg=?DEFAULT_FORMAT}).
 
 -record(syslog_appender, {level=?DEFAULT_LEVEL, facility=user,host,port=415, socket, format=?DEFAULT_FORMAT}).
+
+-record(http_appender, {level=?DEFAULT_LEVEL, format=?DEFAULT_FORMAT, uri, timeout = 100}).
 
 %% log record
 -record(log, {level, msg, data, time, millis}).

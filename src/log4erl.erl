@@ -18,6 +18,7 @@
 -export([add_syslog_appender/2, add_syslog_appender/3]).
 -export([add_xml_appender/2, add_xml_appender/3]).
 -export([add_dummy_appender/2, add_dummy_appender/3]).
+-export([add_http_appender/2, add_http_appender/3]).
 -export([get_appenders/0, get_appenders/1]).
 -export([change_format/2, change_format/3]).
 -export([error_logger_handler/0, error_logger_handler/1]).
@@ -54,7 +55,7 @@ add_appender(Appender, Conf) ->
 %% Appender = {Appender, Name}
 add_appender(Logger, Appender, Conf) ->
     try_msg({add_appender, Logger, Appender, Conf}).
-    
+
 add_console_appender(AName, Conf) ->
     add_appender(?DEFAULT_LOGGER, {console_appender, AName}, Conf).
 
@@ -84,6 +85,12 @@ add_xml_appender(Name, Conf) ->
 
 add_xml_appender(Logger, Name, Conf) ->
     add_appender(Logger, {xml_appender, Name}, Conf).
+
+add_http_appender(Name, Conf) ->
+    add_appender(?DEFAULT_LOGGER, {http_appender, Name}, Conf).
+
+add_http_appender(Logger, Name, Conf) ->
+    add_appender(Logger, {http_appender, Name}, Conf).
 
 add_dummy_appender(AName, Conf) ->
     add_appender(?DEFAULT_LOGGER, {dummy_appender, AName}, Conf).

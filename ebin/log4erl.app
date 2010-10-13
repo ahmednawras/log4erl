@@ -23,6 +23,7 @@
 	smtp_appender,
 	smtp_fsm,
 	syslog_appender,
+	http_appender,
 	xml_appender]},
  {registered,[log4erl]},
  {applications, [kernel,stdlib]},
