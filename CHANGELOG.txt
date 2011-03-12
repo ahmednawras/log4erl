@@ -1,3 +1,7 @@
+master
+==============
+* Added sendmail_appender to send emails by using sendmail(without smtp)
+
 log4erl 0.8.6:
 ==============
 * Added xml_appender for outputing logs to xml files

@@ -88,6 +88,23 @@
   <warn - 01-03-2009 12:21:09,818534
   test smtp appender>
 
+**> log4erl:add_sendmail_appender(Appender, Spec) -> ok
+    log4erl:add_sendmail_appender(Logger, Appender, Spec) -> ok
+  Logger :: atom()
+  Appender :: atom()
+  Spec :: tuple() | list()
+
+  Use sendmail from local server without a smtp server. Most args has the same meaning as add_smtp_appender.
+
+       {Level, Location, Args, Msg}
+	       where:
+	       Level = atom()
+	       Location = List % location of the sendmail binary, default "/usr/sbin/sendmail"
+	       Args = List     % default "-i -t"
+	       Msg = {From, To, Title, MsgFormat} | {To, Title, MsgFormat} | {To, MsgFormat}
+
+  See add_smtp_appender for detail.
+
 **> log4erl:add_syslog_appender(Appender, Spec) -> ok
     log4erl:add_syslog_appender(Logger, Appender, Spec) -> ok
   Logger :: atom()

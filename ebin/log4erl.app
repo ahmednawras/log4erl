@@ -21,6 +21,7 @@
 	log_manager,
 	mochinum,
 	smtp_appender,
+	sendmail_appender,
 	smtp_fsm,
 	syslog_appender,
 	xml_appender]},

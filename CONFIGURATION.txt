@@ -11,6 +11,7 @@ TOC:
   - file_appender
   - console_appender
   - smtp_appender
+  - sendmail_appender
   - syslog_appender
 
 Introduction:
@@ -86,6 +87,15 @@ no_auth = true|false	 => if specified, no authentication is performed even if
 			    username or password below is provided
 username = <U>		 => SMTP username
 password = <P>		 => SMTP password
+from = <From>		 => value of the From field [Optional]
+to = <To>		 => email to send to
+title = <T>		 => title of email [Optional]
+msg = <Format>		 => format of the email message [Optional]
+
+sendmail_appender
+--------------
+location = <Location>	=> the sendmail binary, e.g. /usr/sbin/sendmail [Optional]
+args = <Args>	=> default args -i -t [Optional]
 from = <From>		 => value of the From field [Optional]
 to = <To>		 => email to send to
 title = <T>		 => title of email [Optional]

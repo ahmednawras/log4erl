@@ -15,6 +15,7 @@
 -export([add_file_appender/2, add_file_appender/3]).
 -export([add_console_appender/2, add_console_appender/3]).
 -export([add_smtp_appender/2, add_smtp_appender/3]).
+-export([add_sendmail_appender/2, add_sendmail_appender/3]).
 -export([add_syslog_appender/2, add_syslog_appender/3]).
 -export([add_xml_appender/2, add_xml_appender/3]).
 -export([add_dummy_appender/2, add_dummy_appender/3]).
@@ -72,6 +73,12 @@ add_smtp_appender(Name, Conf) ->
 
 add_smtp_appender(Logger, Name, Conf) ->
     add_appender(Logger, {smtp_appender, Name}, Conf).
+
+add_sendmail_appender(Name, Conf) ->
+	add_appender(?DEFAULT_LOGGER, {sendmail_appender, Name, Conf}).
+
+add_sendmail_appender(Logger, Name, Conf) ->
+	add_appender(Logger, {sendmail_ppender, Name, Conf}).
 
 add_syslog_appender(Name, Conf) ->
     add_appender(?DEFAULT_LOGGER, {syslog_appender, Name}, Conf).
