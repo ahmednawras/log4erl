@@ -15,8 +15,8 @@
 %-define(DEBUG, true).
 
 -ifdef(DEBUG).
--define(LOG(X), io:format("~p: " ++ X,[?MODULE])).
--define(LOG2(X,D), io:format("~p: " ++ X,[?MODULE | D])).
+-define(LOG(X), io:format("[~p:~p] " ++ X ++ "~n",[?MODULE, ?LINE])).
+-define(LOG2(X,D), io:format("[~p:~p] " ++ X ++ "~n",[?MODULE, ?LINE | D])).
 -else.
 -define(LOG(_X), ok).
 -define(LOG2(_X,_D), ok).
@@ -25,7 +25,7 @@
 
 %% type = time | size
 %% max = seconds (for time) | or kiloBytes (for size)
--record(log_type,{type, max, timer}).
+-record(log_type,{type, max}).
 
 %% file_name = the name of the file without counter 
 %% fd = the descriptior for the file
