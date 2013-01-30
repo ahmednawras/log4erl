@@ -16,6 +16,32 @@ test() ->
     T = format(Log, Tokens),
     io:format("~s",[T]).
 
+test_dst() ->
+    HourSwitchingFromDST = {{2012,10,28},{2,13,37}},
+    HourSwitchingToDST = {{2013,03,31},{2,13,37}},
+    Log1 = #log{level = warn,
+	       msg = "Testing logging during switch FROM DST! ~p",
+	       data = [tt],
+	       time = HourSwitchingFromDST,
+               millis = 111},
+    Log2 = #log{level = warn,
+	       msg = "Testing logging during switch TO DST! ~p",
+	       data = [tt],
+	       time = HourSwitchingToDST,
+               millis = 111},
+    FormatTokens = fun(Ts) ->
+                           {ok, Tokens} = parse(Ts),
+                           T1 = format(Log1, Tokens),
+                           T2 = format(Log2, Tokens),
+                           io:format("~s",[T1]),
+                           io:format("~s",[T2])
+                   end,
+    lists:map(FormatTokens, ["[%I] %l%n", %% iso_format
+                             "[%S] %l%n", %% iso_format2
+                             "[%Z] %l%n"  %% time_zone
+                            ]),
+    ok.
+
 test2(Num) ->
     Ts = "%j %T [%L] - %l",
     {ok, Tokens} = parse(Ts),
@@ -142,13 +168,14 @@ get_token_value(new_line, _Log) ->
     "\n";
 % GMT TZ
 get_token_value(iso_format, Log) ->
-    [Date] = calendar:local_time_to_universal_time_dst(Log#log.time),
-    get_token_value(date2, Log) ++ "T" ++ get_token_value(time2, Log#log{time=Date}) ++ "Z";
+    Date = local_time_to_pseudo_universal_time_dst(Log#log.time),
+    get_token_value(date2, Log) ++ "T" ++
+        get_token_value(time2, Log#log{time=Date}) ++ "Z";
 % With TZ
 get_token_value(iso_format2, Log) ->
-    D = Log#log.time,
-    [UD] = calendar:local_time_to_universal_time_dst(D),
-    Ds = calendar:datetime_to_gregorian_seconds(D),
+    Date = Log#log.time,
+    UD = local_time_to_pseudo_universal_time_dst(Date),
+    Ds = calendar:datetime_to_gregorian_seconds(Date),
     UDs = calendar:datetime_to_gregorian_seconds(UD),
     TZ = case Ds-UDs > 0 of
 	     true ->
@@ -165,9 +192,9 @@ get_token_value(iso_format2, Log) ->
     get_token_value(date2, Log) ++ "T" ++ get_token_value(time2, Log) ++ TZ;
 % TZ only
 get_token_value(time_zone, Log) ->
-    D = Log#log.time,
-    [UD] = calendar:local_time_to_universal_time_dst(D),
-    Ds = calendar:datetime_to_gregorian_seconds(D),
+    Date = Log#log.time,
+    UD = local_time_to_pseudo_universal_time_dst(Date),
+    Ds = calendar:datetime_to_gregorian_seconds(Date),
     UDs = calendar:datetime_to_gregorian_seconds(UD),
     TZ = case Ds-UDs > 0 of
 	     true ->
@@ -254,3 +281,11 @@ parse_char($Z) ->
 parse_char(C) ->
     C.
 
+%% Always log a time, even though corresponding UTC time during periods
+%% switching TO or FROM DST may not make sense.
+local_time_to_pseudo_universal_time_dst(DateTime1) ->
+    case calendar:local_time_to_universal_time_dst(DateTime1) of
+        [] -> DateTime1;
+        [DstDateTimeUTC, _DateTimeUTC] -> DstDateTimeUTC;
+        [DateTimeUTC] -> DateTimeUTC
+    end.
