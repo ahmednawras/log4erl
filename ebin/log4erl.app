@@ -1,0 +1,13 @@
+{application,log4erl,
+             [{description,"Logger for erlang in the spirit of Log4J"},
+              {vsn,"0.9.0"},
+              {registered,[log4erl]},
+              {applications,[kernel,stdlib]},
+              {mod,{log4erl,[]}},
+              {start_phases,[]},
+              {modules,[console_appender,dummy_appender,email_msg,
+                        error_logger_log4erl_h,file_appender,log4erl,
+                        log4erl_conf,log4erl_lex,log4erl_parser,log4erl_sup,
+                        log4erl_utils,log_filter,log_filter_codegen,
+                        log_formatter,log_manager,logger_guard,smtp_appender,
+                        smtp_fsm,syslog_appender,xml_appender]}]}.
