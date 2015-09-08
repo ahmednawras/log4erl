@@ -66,7 +66,7 @@ to_log(Cur, Level) ->
     end.
 
 get_id() ->
-    {_,_,N} = now(),
+    {_,_,N} = os:timestamp(),
     Id = "log4erl_" ++ integer_to_list(random:uniform(N)),
     list_to_atom(Id).
 

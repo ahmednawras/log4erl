@@ -45,7 +45,7 @@ change_filename(Logger, Appender, Filename) ->
 %% Logger API functions
 %%--------------------------------------------------------------------
 log(Logger, Level, Log, Data) ->
-    Now = {_, _, Ms} = erlang:now(),
+    Now = {_, _, Ms} = os:timestamp(),
     T = calendar:now_to_local_time(Now),
     ?LOG2("Logging:~n ~p ~p ~p ~p~n",[Logger, Level, Log, Data]),
     LL = #log{level=Level, msg=Log, data=Data, time=T, millis = Ms div 1000},
