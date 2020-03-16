@@ -1,5 +1,6 @@
 -module(log_formatter).
 
+-compile(nowarn_export_all).
 -compile(export_all).
 
 -include("../include/log4erl.hrl").

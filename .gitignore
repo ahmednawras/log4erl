@@ -1,3 +1,5 @@
 deps
 src/log4erl_lex.erl
 src/log4erl_parser.erl
+ebin/*
+src/*.app
